@@ -197,7 +197,6 @@ def run_multihead_self_attention(
 
     return layer(in_features)
 
-
 def run_multihead_self_attention_with_rope(
     d_model: int,
     num_heads: int,
@@ -269,7 +268,6 @@ def run_multihead_self_attention_with_rope(
         token_positions=token_positions,
     )
 
-
 def run_rope(
     d_k: int,
     theta: float,
@@ -299,7 +297,6 @@ def run_rope(
     )
 
     return rope(in_query_or_key, token_positions)
-
 
 def run_transformer_block(
     d_model: int,
@@ -388,7 +385,6 @@ def run_transformer_block(
     block.load_state_dict(weights)
 
     return block(in_features)
-
 
 def run_transformer_lm(
     vocab_size: int,
@@ -489,7 +485,6 @@ def run_transformer_lm(
 
     return model(in_indices)
 
-
 def run_rmsnorm(
     d_model: int,
     eps: float,
@@ -569,7 +564,6 @@ def run_get_batch(
         device=device,
     )
 
-
 def run_softmax(in_features: Float[Tensor, " ..."], dim: int) -> Float[Tensor, " ..."]:
     """
     Given a tensor of inputs, return the output of softmaxing the given `dim`
@@ -586,7 +580,6 @@ def run_softmax(in_features: Float[Tensor, " ..."], dim: int) -> Float[Tensor, "
     from cs336_basics.layers import softmax
 
     return softmax(in_features, dim=dim)
-
 
 def run_cross_entropy(
     inputs: Float[Tensor, " batch_size vocab_size"], targets: Int[Tensor, " batch_size"]
@@ -607,7 +600,6 @@ def run_cross_entropy(
 
     return cross_entropy(inputs, targets)
 
-
 def run_gradient_clipping(parameters: Iterable[torch.nn.Parameter], max_l2_norm: float) -> None:
     """Given a set of parameters, clip their combined gradients to have l2 norm at most max_l2_norm.
 
@@ -621,7 +613,6 @@ def run_gradient_clipping(parameters: Iterable[torch.nn.Parameter], max_l2_norm:
 
     gradient_clipping(parameters, max_l2_norm)
 
-
 def get_adamw_cls() -> Any:
     """
     Returns a torch.optim.Optimizer that implements AdamW.
@@ -629,7 +620,6 @@ def get_adamw_cls() -> Any:
     from cs336_basics.optimizer import AdamW
 
     return AdamW
-
 
 def run_get_lr_cosine_schedule(
     it: int,
@@ -666,7 +656,6 @@ def run_get_lr_cosine_schedule(
         cosine_cycle_iters=cosine_cycle_iters,
     )
 
-
 def run_save_checkpoint(
     model: torch.nn.Module,
     optimizer: torch.optim.Optimizer,
@@ -683,8 +672,9 @@ def run_save_checkpoint(
             we've completed.
         out (str | os.PathLike | BinaryIO | IO[bytes]): Path or file-like object to serialize the model, optimizer, and iteration to.
     """
-    raise NotImplementedError
+    from cs336_basics.checkpoint import save_checkpoint
 
+    save_checkpoint(model, optimizer, iteration, out)
 
 def run_load_checkpoint(
     src: str | os.PathLike | BinaryIO | IO[bytes],
@@ -704,8 +694,9 @@ def run_load_checkpoint(
     Returns:
         int: the previously-serialized number of iterations.
     """
-    raise NotImplementedError
+    from cs336_basics.checkpoint import load_checkpoint
 
+    return load_checkpoint(src, model, optimizer)
 
 def get_tokenizer(
     vocab: dict[int, bytes],
